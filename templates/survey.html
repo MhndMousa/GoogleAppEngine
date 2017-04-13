@@ -1,0 +1,61 @@
+<html>
+<head>
+<style>
+body,table,tr,td {
+  text-align: center;
+  background-color: lightblue;2
+}
+h1{
+  color:  lightblue;
+  background: grey;
+}
+h3{
+  background: grey;
+  color: lightblue;
+}
+</style>
+</head>
+<body>
+
+
+
+
+
+
+
+
+  <h1>Hello {{nick}} !</h1>
+  <h3 style="">Please take our survey!<br>What is your major?</h3>
+
+
+
+  <form method="get" action="{{ url_for('survey') }}">
+    <label for="add_major">Add your major</label><br>
+    <input type="text" name="added_major" placeholder="Computer Science">
+    <br><input type="submit">
+  </form>
+
+
+  <table border="1">
+    {% for p in majors %}
+
+    <tr>
+      <td>{{p.0}}</td>
+      <td>{{p.1}}</td>
+    </tr>
+
+    {% endfor %}
+  </table>
+
+
+
+
+  <br><br><br><br><br><br>
+  <h4>This is just a demo of the URL Fetch <br> we couldn't find anything that makes sense to this project.</h4>
+  <textarea name="name" rows="5" cols="64">{{google_demo_text}}</textarea>
+  <br>
+  <!-- {{logout_url}} -->
+  <a href="{{logout_url}}">Log Out</a>
+
+</body>
+</html>

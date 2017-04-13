@@ -12,22 +12,23 @@ app.config['DEBUG'] = True
 
 
 @app.route('/')
-def counter():
+def survey():
 
     url = 'http://www.google.com/humans.txt'
     try:
         result = urlfetch.fetch(url)
         if result.status_code == 200:
-            uindy = result.content
+            google_text = result.content
         else:
             response.status_code = result.status_code
     except urlfetch.Error:
         logging.exception('Caught exception fetching url')
 
 
+
+
     user = users.get_current_user()
     if user:
-      #return str(dir(user))
       curr_users = memcache.get('curr_users')
       if curr_users:
         if user.nickname() not in curr_users:
@@ -46,8 +47,8 @@ def counter():
       # set up names if it doesn't exist
       memcache.add('names','')
       major = "Finance"
-      if request.method == 'GET' and 'favorite_class' in request.args:
-        major = request.args['favorite_class']
+      if request.method == 'GET' and 'added_major' in request.args:
+        major = request.args['added_major']
         # Check to see if that name is in names
         names = memcache.get('names')
         if major in names.split('/'):
@@ -57,16 +58,23 @@ def counter():
           memcache.set('names', names + '/' + major)
           memcache.set(major,1)
       names = memcache.get('names').split('/')
-      counts = []
+      majors = []
       for n in names:
-        counts.append( (n, memcache.get(n)))
+        majors.append( (n, memcache.get(n)))
 
-      return render_template('counter.html', counts=counts, face= major, nick = user.nickname(), uindy = uindy )
+
+
+
+      return render_template('survey.html', majors=majors, add_major= major,
+      nick = user.nickname(), google_demo_text = google_text,
+      logout_url = logout_url)
+
+
 
 
     else:
       login_url = users.create_login_url('/')
-      return 'Sorry, you are not logged in. <a href="%s">login</a>' % login_url, 200
+      return 'You are not logged in. <br> <a href="%s">login</a>' % login_url, 200
 
 
 
